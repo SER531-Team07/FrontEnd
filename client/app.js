@@ -1,15 +1,22 @@
 var search = () => {
     var location = document.getElementById('location').value;
+    var company = document.getElementById('company').value;
     var title = document.getElementById('title').value;
     var industry = document.getElementById('industry').value;
     var jobType = document.getElementById('jobType').value;
-    var filter = { location, title, industry, jobType };
+    var filter = { location, company, title, industry, jobType };
     searchAPI(filter);
     createCharts();
 }
 
 var searchAPI = (filter) => {
-    fetch('/jobs')
+    let endpoint = 'http://localhost:8080/jobs?'
+    filter.location != '' && (endpoint += `city=${filter.location}&`)
+    filter.company != '' && (endpoint += `company=${filter.company}&`)
+    filter.title != '' && (endpoint += `title=${filter.title}&`)
+    filter.jobType != '' && (endpoint += `jobtype=${filter.jobType}&`)
+    filter.industry != '' && (endpoint += `industry=${filter.industry}&`)
+    fetch(endpoint)
     .then(response => {
         if (response.ok) {
             return response;
