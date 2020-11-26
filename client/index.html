@@ -1,0 +1,90 @@
+<html>
+
+<head>
+    <title>
+        Job Search
+    </title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Job Search Application">
+    <meta name="keywords" content="Job, Job Search, Semantic Web, Semantic Web Application, SPARQL, SER531, SER 531">
+    <meta name="author"
+        content="Parikshith Kedilaya Mallar, Raghavan Sampige Sreenivasa, Rishika Bera, Sayali Suryakant Tanawade">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+    <!-- JQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+        defer></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"
+        defer></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js" defer></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"
+        defer></script>
+    <script type="text/javascript" src="/client/app.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar fixed-top navbar-expand-lg navbar-dark indigo scrolling-navbar">
+            <a class="navbar-brand" href="#"><strong>Job Search</strong></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main class="pt-5 mx-lg-5">
+        <div class="container-fluid mt-5">
+            <form class="d-flex justify-content-center border border-light p-4"
+                onsubmit="event.preventDefault(); search();">
+                <input type="search" id="location" placeholder="Job Location" aria-label="Search"
+                    class="form-control mb-6">
+                <input type="search" id="title" placeholder="Job Title" aria-label="Search" class="form-control mb-6">
+                <input type="search" id="industry" placeholder="Industry" aria-label="Search" class="form-control mb-6">
+                <select id="jobType" class="custom-select custom-select-mb">
+                    <option value="" disabled selected>Choose your option</option>
+                    <option value="1">Full Time</option>
+                    <option value="2">Part Time</option>
+                    <option value="3">Internship</option>
+                </select>
+                <button class="btn btn-primary btn-sm my-0 p" type="submit">
+                    <i class="fa fa-search"></i>
+                </button>
+            </form>
+            <div class="row" id="row">
+
+            </div>
+            <div class="row p-5" id="row">
+
+            </div>
+        </div>
+    </main>
+    <footer class="page-footer font-small indigo fixed-bottom">
+
+        <div class="footer-copyright text-center py-3">
+            SER531-Team07 Fall 2020
+        </div>
+
+    </footer>
+</body>
+
+</html>

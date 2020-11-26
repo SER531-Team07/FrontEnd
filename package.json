@@ -1,0 +1,17 @@
+{
+  "name": "ser531-team7",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js > out.log",
+    "start": "nohup node index.js > out.log &"
+  },
+  "author": "pkedilay@asu.edu",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "node-fetch": "^2.6.1",
+    "sparql": "^0.1.3"
+  }
+}
