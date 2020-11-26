@@ -30,7 +30,7 @@
     <!-- MDB core JavaScript -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"
         defer></script>
-    <script type="text/javascript" src="/client/app.js" defer></script>
+    <script type="text/javascript" src="app.js" defer></script>
 </head>
 
 <body>
@@ -58,13 +58,15 @@
                 onsubmit="event.preventDefault(); search();">
                 <input type="search" id="location" placeholder="Job Location" aria-label="Search"
                     class="form-control mb-6">
+                <input type="search" id="company" placeholder="Company" aria-label="Search"
+                    class="form-control mb-6">
                 <input type="search" id="title" placeholder="Job Title" aria-label="Search" class="form-control mb-6">
                 <input type="search" id="industry" placeholder="Industry" aria-label="Search" class="form-control mb-6">
                 <select id="jobType" class="custom-select custom-select-mb">
                     <option value="" disabled selected>Choose your option</option>
-                    <option value="1">Full Time</option>
-                    <option value="2">Part Time</option>
-                    <option value="3">Internship</option>
+                    <option value="Full-Time">Full Time</option>
+                    <option value="Part-Time">Part Time</option>
+                    <option value="Internship">Internship</option>
                 </select>
                 <button class="btn btn-primary btn-sm my-0 p" type="submit">
                     <i class="fa fa-search"></i>
