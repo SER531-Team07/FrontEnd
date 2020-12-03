@@ -1,3 +1,5 @@
+const url = 'http://localhost:8080';
+
 var search = () => {
     var location = document.getElementById('location').value;
     var company = document.getElementById('company').value;
@@ -7,10 +9,25 @@ var search = () => {
     var filter = { location, company, title, industry, jobType };
     searchAPI(filter);
     createCharts();
+    if (location) {
+        locationVisualizationAPI(location);
+    }
+    if (company) {
+        companyVisualizationAPI(company);
+    }
+    if (title) {
+        titleVisualizationAPI(title);
+    }
+    if (industry) {
+        industryVisualizationAPI(industry);
+    }
+    if (jobType) {
+        jobtypeVisualizationAPI(jobType);
+    }
 }
 
 var searchAPI = (filter) => {
-    let endpoint = 'http://localhost:8080/jobs?'
+    let endpoint = url + '/jobs?'
     filter.location != '' && (endpoint += `city=${filter.location}&`)
     filter.company != '' && (endpoint += `company=${filter.company}&`)
     filter.title != '' && (endpoint += `title=${filter.title}&`)
@@ -27,6 +44,86 @@ var searchAPI = (filter) => {
     })
     .then(res => res.json())
     .then(data => printResults(data))
+    .catch(err => console.error(err));
+}
+
+var locationVisualizationAPI = (location) => {
+    let endpoint = url + '/visualization/location?city=' + location;
+    fetch(endpoint)
+    .then(response => {
+        if (response.ok) {
+            return response;
+        } else {
+            console.log('Error occured');
+            return {};
+        } 
+    })
+    .then(res => res.json())
+    .then(data => console.log(data))
+    .catch(err => console.error(err));
+}
+
+var companyVisualizationAPI = (company) => {
+    let endpoint = url + '/visualization/company?company=' + company;
+    fetch(endpoint)
+    .then(response => {
+        if (response.ok) {
+            return response;
+        } else {
+            console.log('Error occured');
+            return {};
+        } 
+    })
+    .then(res => res.json())
+    .then(data => console.log(data))
+    .catch(err => console.error(err));
+}
+
+var industryVisualizationAPI = (industry) => {
+    let endpoint = url + '/visualization/count?industry=' + industry;
+    fetch(endpoint)
+    .then(response => {
+        if (response.ok) {
+            return response;
+        } else {
+            console.log('Error occured');
+            return {};
+        } 
+    })
+    .then(res => res.json())
+    .then(data => console.log(data))
+    .catch(err => console.error(err));
+}
+
+var titleVisualizationAPI = (title) => {
+    let endpoint = url + '/visualization/count?title=' + title;
+    fetch(endpoint)
+    .then(response => {
+        if (response.ok) {
+            return response;
+        } else {
+            console.log('Error occured');
+            return {};
+        } 
+    })
+    .then(res => res.json())
+    .then(data => console.log(data))
+    .catch(err => console.error(err));
+}
+
+var jobtypeVisualizationAPI = (jobtype) => {
+    let endpoint = url + '/visualization/count?type=' + jobtype;
+    fetch(endpoint)
+    .then(response => {
+        if (response.ok) {
+            return response;
+        } else {
+            console.log('Error occured');
+            return {};
+        } 
+    })
+    .then(res => res.json())
+    .then(data => console.log(data))
     .catch(err => console.error(err));
 }
 
@@ -54,91 +151,60 @@ var printResults = (results) => {
     }
 
     document.getElementById("results").innerHTML = resultHTML;
-    renderChart();
 }
 
 var createCharts = () => {
     document.getElementById("row").innerHTML = `<div class="border border-light p-4 col-3" id="graphs">
-        <div class="card">
-            <div class="card-header">Radar Chart</div>
-            <div class="card-body">
-                <canvas id="radarChart"></canvas>
-            </div>
         </div>
-        <div class="p-4"></div>
-        <div class="card">
-            <div class="card-header">Horizontal Bar Chart</div>
-            <div class="card-body">
-                <canvas id="horizontalBar"></canvas>
-            </div>
-        </div>
-    </div>
-    <div class="border border-light p-4 col-9 " id="results"></div>`;
+        <div class="border border-light p-4 col-9 " id="results"></div>`;
 }
 
+var locationVisualization = (location) => {
+    var html = `<div class="card">
+        <div class="card-header">Nearby Locations</div>
+        <div class="card-body">
+            <canvas id="horizontalBar"></canvas>
+        </div>
+    </div>
+    <div class="p-4"></div>`;
+}
 
-function renderChart() {
-    var ctxR = document.getElementById("radarChart").getContext('2d');
-    new Chart(ctxR, {
-        type: 'radar',
-        data: {
-            labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"],
-            datasets: [{
-                label: "My First dataset",
-                data: [65, 59, 90, 81, 56, 55, 40],
-                backgroundColor: [
-                    'rgba(105, 0, 132, .2)',
-                ],
-                borderColor: [
-                    'rgba(200, 99, 132, .7)',
-                ],
-                borderWidth: 2
-            }, {
-                label: "My Second dataset",
-                data: [28, 48, 40, 19, 96, 27, 100],
-                backgroundColor: [
-                    'rgba(0, 250, 220, .2)',
-                ],
-                borderColor: [
-                    'rgba(0, 213, 132, .7)',
-                ],
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true
-        }
-    });
+var companyVisualization = (company) => {
+    var html = `<div class="card">
+        <div class="card-header">${company}</div>
+        <div class="card-body">
+            Number of jobs by ${company}
+        </div>
+    </div>
+    <div class="p-4"></div>`;
+}
 
+var industryVisualization = (industry) => {
+    var html = `<div class="card">
+        <div class="card-header">${industry}</div>
+        <div class="card-body">
+            Number of jobs relavant to ${industry}: 
+        </div>
+    </div>
+    <div class="p-4"></div>`;
+}
 
-    new Chart(document.getElementById("horizontalBar"), {
-        "type": "horizontalBar",
-        "data": {
-            "labels": ["Red", "Orange", "Yellow", "Green", "Blue", "Purple", "Grey"],
-            "datasets": [{
-                "label": "My First Dataset",
-                "data": [22, 33, 55, 12, 86, 23, 14],
-                "fill": false,
-                "backgroundColor": ["rgba(255, 99, 132, 0.2)", "rgba(255, 159, 64, 0.2)",
-                    "rgba(255, 205, 86, 0.2)", "rgba(75, 192, 192, 0.2)",
-                    "rgba(54, 162, 235, 0.2)",
-                    "rgba(153, 102, 255, 0.2)", "rgba(201, 203, 207, 0.2)"
-                ],
-                "borderColor": ["rgb(255, 99, 132)", "rgb(255, 159, 64)", "rgb(255, 205, 86)",
-                    "rgb(75, 192, 192)", "rgb(54, 162, 235)", "rgb(153, 102, 255)",
-                    "rgb(201, 203, 207)"
-                ],
-                "borderWidth": 1
-            }]
-        },
-        "options": {
-            "scales": {
-                "xAxes": [{
-                    "ticks": {
-                        "beginAtZero": true
-                    }
-                }]
-            }
-        }
-    });
+var jobtypeVisualization = (jobtype) => {
+    var html = `<div class="card">
+        <div class="card-header">${jobtype}</div>
+        <div class="card-body">
+            Number of ${jobtype} jobs: 
+        </div>
+    </div>
+    <div class="p-4"></div>`;
+}
+
+var titleVisualization = (title) => {
+    var html = `<div class="card">
+        <div class="card-header">${title}</div>
+        <div class="card-body">
+            Number of "${jobtype}" related jobs: 
+        </div>
+    </div>
+    <div class="p-4"></div>`;
 }
