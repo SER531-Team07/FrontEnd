@@ -162,6 +162,10 @@ var createCharts = () => {
         <div class="border border-light p-4 col-9 " id="results">
             ${startLoading()}
         </div>`;
+    if (screen.width < 667) {
+        document.getElementById('graphs').setAttribute('style', 'display: none;');
+        document.getElementById('results').setAttribute('class', 'border border-light p-4 col-12');
+    }
 }
 
 var locationVisualization = (locations) => {
@@ -252,5 +256,15 @@ var stopLoading = () => {
     var loading = document.getElementById('loading');
     if (loading && loading != null) {
         document.getElementById('loading').remove();
+    }
+}
+
+window.addEventListener('DOMContentLoaded', adjustInputBox());
+
+function adjustInputBox () {
+    if (screen.width > 1120) {
+        document.getElementById('form').setAttribute('class','d-flex justify-content-center border border-light p-4');
+    } else {
+        document.getElementById('form').setAttribute('class', 'justify-content-center border border-light p-4');
     }
 }
