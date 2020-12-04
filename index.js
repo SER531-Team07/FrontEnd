@@ -2,7 +2,7 @@ const app = require('express')(),
       cors = require('cors'),
       fetch = require('node-fetch');
 
-const sparqlService = 'http://localhost:8080';
+const sparqlService = 'http://ec2-3-134-101-50.us-east-2.compute.amazonaws.com:8080';
 
 app.use(cors());
 
