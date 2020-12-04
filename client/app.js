@@ -1,5 +1,3 @@
-const url = 'http://localhost:8080';
-
 var search = () => {
     var location = document.getElementById('location').value;
     var company = document.getElementById('company').value;
@@ -27,7 +25,7 @@ var search = () => {
 }
 
 var searchAPI = (filter) => {
-    let endpoint = url + '/jobs?'
+    let endpoint = '/jobs?'
     filter.location != '' && (endpoint += `city=${filter.location}&`)
     filter.company != '' && (endpoint += `company=${filter.company}&`)
     filter.title != '' && (endpoint += `title=${filter.title}&`)
@@ -48,7 +46,7 @@ var searchAPI = (filter) => {
 }
 
 var locationVisualizationAPI = (location) => {
-    let endpoint = url + '/visualization/location?city=' + location;
+    let endpoint = '/visualization/location?city=' + location;
     fetch(endpoint)
     .then(response => {
         if (response.ok) {
@@ -59,12 +57,12 @@ var locationVisualizationAPI = (location) => {
         } 
     })
     .then(res => res.json())
-    .then(data => console.log(data))
+    .then(data => locationVisualization(data))
     .catch(err => console.error(err));
 }
 
 var companyVisualizationAPI = (company) => {
-    let endpoint = url + '/visualization/company?company=' + company;
+    let endpoint = '/visualization/company?company=' + company;
     fetch(endpoint)
     .then(response => {
         if (response.ok) {
@@ -75,12 +73,12 @@ var companyVisualizationAPI = (company) => {
         } 
     })
     .then(res => res.json())
-    .then(data => console.log(data))
+    .then(data => companyVisualization(data))
     .catch(err => console.error(err));
 }
 
 var industryVisualizationAPI = (industry) => {
-    let endpoint = url + '/visualization/count?industry=' + industry;
+    let endpoint = '/visualization/count?industry=' + industry;
     fetch(endpoint)
     .then(response => {
         if (response.ok) {
@@ -91,12 +89,12 @@ var industryVisualizationAPI = (industry) => {
         } 
     })
     .then(res => res.json())
-    .then(data => console.log(data))
+    .then(data => industryVisualization(data, industry))
     .catch(err => console.error(err));
 }
 
 var titleVisualizationAPI = (title) => {
-    let endpoint = url + '/visualization/count?title=' + title;
+    let endpoint = '/visualization/count?title=' + title;
     fetch(endpoint)
     .then(response => {
         if (response.ok) {
@@ -107,12 +105,12 @@ var titleVisualizationAPI = (title) => {
         } 
     })
     .then(res => res.json())
-    .then(data => console.log(data))
+    .then(data => titleVisualization(data, title))
     .catch(err => console.error(err));
 }
 
 var jobtypeVisualizationAPI = (jobtype) => {
-    let endpoint = url + '/visualization/count?type=' + jobtype;
+    let endpoint = '/visualization/count?type=' + jobtype;
     fetch(endpoint)
     .then(response => {
         if (response.ok) {
@@ -123,7 +121,7 @@ var jobtypeVisualizationAPI = (jobtype) => {
         } 
     })
     .then(res => res.json())
-    .then(data => console.log(data))
+    .then(data => jobtypeVisualization(data, jobtype))
     .catch(err => console.error(err));
 }
 
@@ -155,56 +153,104 @@ var printResults = (results) => {
 
 var createCharts = () => {
     document.getElementById("row").innerHTML = `<div class="border border-light p-4 col-3" id="graphs">
+        <div id="visualizeLocation"></div>
+        <div id="visualizeCompany"></div>
+        <div id="visualizeIndustry"></div>
+        <div id="visualizeJobtype"></div>
+        <div id="visualizeTitle"></div>
         </div>
-        <div class="border border-light p-4 col-9 " id="results"></div>`;
+        <div class="border border-light p-4 col-9 " id="results">
+            ${startLoading()}
+        </div>`;
 }
 
-var locationVisualization = (location) => {
+var locationVisualization = (locations) => {
+    if (locations.length === 0) return;
     var html = `<div class="card">
-        <div class="card-header">Nearby Locations</div>
+        <div class="card-header">Suggested Nearby Locations</div>
         <div class="card-body">
-            <canvas id="horizontalBar"></canvas>
+            ${locations.join(", ")}
         </div>
     </div>
     <div class="p-4"></div>`;
+    document.getElementById('visualizeLocation').innerHTML = html;
 }
 
 var companyVisualization = (company) => {
+    if (company.company.length === 0) return;
+    var html = '';
+    company.company.forEach(comp => {
+        let card = `<div class="card">
+        <div class="card-header">${comp.companyName}</div>
+            <div class="card-body">
+                CEO: ${comp.ceoName}
+            </div>
+                <div class="card-body">
+                Number Of Employees: ${comp.employees}
+            </div>
+                <div class="card-body">
+                Total Jobs Posted: ${comp.jobCount}
+            </div>
+        </div>
+        <div class="p-4"></div>`;
+        html += card;
+    });
+    
+    document.getElementById('visualizeCompany').innerHTML = html;
+}
+
+var industryVisualization = (data, industry) => {
+    if (data.length === 0) return;
+    var sum = data.reduce((a, b) => {
+        return parseInt(a) + parseInt(b);
+    });
     var html = `<div class="card">
-        <div class="card-header">${company}</div>
+        <div class="card-header">${industry} Industry Jobs</div>
         <div class="card-body">
-            Number of jobs by ${company}
+            Number of jobs relavant to ${industry}: ${sum}
         </div>
     </div>
     <div class="p-4"></div>`;
+    document.getElementById('visualizeIndustry').innerHTML = html;
 }
 
-var industryVisualization = (industry) => {
-    var html = `<div class="card">
-        <div class="card-header">${industry}</div>
-        <div class="card-body">
-            Number of jobs relavant to ${industry}: 
-        </div>
-    </div>
-    <div class="p-4"></div>`;
-}
-
-var jobtypeVisualization = (jobtype) => {
+var jobtypeVisualization = (data, jobtype) => {
+    if (data.length === 0) return;
     var html = `<div class="card">
         <div class="card-header">${jobtype}</div>
         <div class="card-body">
-            Number of ${jobtype} jobs: 
+            Number of ${jobtype} jobs: ${data}
         </div>
     </div>
     <div class="p-4"></div>`;
+    document.getElementById('visualizeJobtype').innerHTML = html;
 }
 
-var titleVisualization = (title) => {
+var titleVisualization = (data, title) => {
+    if (data.length === 0) return;
+    var sum = data.reduce((a, b) => {
+        return parseInt(a) + parseInt(b);
+    });
     var html = `<div class="card">
-        <div class="card-header">${title}</div>
+        <div class="card-header">Job title: ${title}</div>
         <div class="card-body">
-            Number of "${jobtype}" related jobs: 
+            Number of jobs containing title "${title}": ${sum}
         </div>
     </div>
     <div class="p-4"></div>`;
+    document.getElementById('visualizeTitle').innerHTML = html;
+}
+
+var startLoading = () => {
+    return `<div id="loading" class="d-flex align-items-center">
+        <strong>Please wait while we fetch data...</strong>
+        <div class="spinner-border ml-auto" style="width: 3rem; height: 3rem;" role="status" aria-hidden="true"></div>
+    </div>`;
+}
+
+var stopLoading = () => {
+    var loading = document.getElementById('loading');
+    if (loading && loading != null) {
+        document.getElementById('loading').remove();
+    }
 }
